@@ -1,0 +1,3 @@
+[submodule "3rdparty/oneDNN"]
+	path = 3rdparty/oneDNN
+	url = https://github.com/oneapi-src/oneDNN.git
