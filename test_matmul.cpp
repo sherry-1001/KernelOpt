@@ -12,7 +12,7 @@ int main() {
   int opt_level = 0;
   vector<double> a, b, c, bias, refc;
 
-  for (p = PFIRST; p <= PLAST; p += PINC) {
+  for (p = PFIRST; p <= PLAST; p *= PINC) {
     m = (M == -1 ? p : M);
     n = (N == -1 ? p : N);
     k = (K == -1 ? p : K);
@@ -37,22 +37,23 @@ int main() {
     for (rep = 0; rep < NREPEATS; rep++) {
       CopyMatrix(m, n, &bias[0], ldc, &c[0], ldc);
       // Execute Start Timer
-      auto start_time = std::chrono::system_clock::now();
-      OptLevel(opt_level, m, n, k, &a[0], lda, &b[0], ldb, &c[0], ldc);
+      auto start_time = dclock();
+
+      OptMM0(m, n, k, &a[0], lda, &b[0], ldb, &c[0], ldc);
+
       // Execute End Timer
-      auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-          std::chrono::system_clock::now() - start_time);
+      auto duration = dclock() - start_time;
       if (rep == 0) {
-        best_cost_time = duration.count();
+        best_cost_time = duration;
       } else {
-        best_cost_time = duration.count() < best_cost_time ? duration.count()
-                                                           : best_cost_time;
+        best_cost_time = duration < best_cost_time ? duration : best_cost_time;
       }
     }
 
     double diff = Compare(m, n, &c[0], ldc, &refc[0], ldc);
-    double gflops = GetGflops(best_cost_time, M, N, K);
-    std::cout << p << " " << gflops << " " << diff;
+    double gflops = GetGflops(best_cost_time, m, n, k);
+
+    printf("%d %lf %lf \n", p, gflops, diff);
     fflush(stdout);
   }
   return 0;

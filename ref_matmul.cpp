@@ -35,7 +35,7 @@ double matmul_example(dnnl::engine::kind engine_kind) {
   dnnl::stream engine_stream(engine);
 
   // Tensor dimensions.
-  const memory::dim M = 1024, K = 512, N = 2048;
+  const memory::dim M = 1024, K = 1024, N = 1024;
 
   // Source (src), weights, and destination (dst) tensors dimensions.
   memory::dims src_dims = {M, K};
@@ -79,7 +79,7 @@ double matmul_example(dnnl::engine::kind engine_kind) {
   matmul_args.insert({DNNL_ARG_DST, dst_mem});
 
   // Execute Start Timer
-  auto start_time = std::chrono::system_clock::now();
+  auto start_time = dclock();
 
   // Primitive execution: matrix multiplication
   matmul_prim.execute(engine_stream, matmul_args);
@@ -91,10 +91,9 @@ double matmul_example(dnnl::engine::kind engine_kind) {
   read_from_dnnl_memory(dst_data.data(), dst_mem);
 
   // Execute End Timer
-  auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-      std::chrono::system_clock::now() - start_time);
+  auto duration = dclock() - start_time;
 
-  double gflops = GetGflops(duration.count(), M, N, K);
+  double gflops = GetGflops(duration, M, N, K);
   return gflops;
 }
 
