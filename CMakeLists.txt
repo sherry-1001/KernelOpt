@@ -31,6 +31,8 @@ set(DNNL_ENABLE_CONCURRENT_EXEC ON CACHE INTERNAL "" FORCE)
 set(DNNL_ENABLE_PRIMITIVE_CACHE ON CACHE INTERNAL "" FORCE)
 # add_subdirectory(3rdparty/oneDNN)
 
+set(SOURCE, graph_visit.cpp)
+
 add_executable(omp_matmul omp_matmul.cpp)
 add_executable(naive_matmul naive_matmul.cpp)
 # add_executable(ref_matmul ref_matmul.cpp)
@@ -38,5 +40,5 @@ add_executable(naive_matmul naive_matmul.cpp)
 add_executable(test_matmul test_matmul.cpp)
 add_executable(test_opt_matmul test_opt_matmul.cpp)
 
-add_executable(test_graph test_graph.cpp)
+add_executable(test_graph test_graph.cpp ${SOURCE})
 
