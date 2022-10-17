@@ -1,3 +1,6 @@
 [submodule "3rdparty/oneDNN"]
 	path = 3rdparty/oneDNN
 	url = https://github.com/oneapi-src/oneDNN.git
+[submodule "tutorial"]
+	path = tutorial
+	url = https://github.com/flame/how-to-optimize-gemm.git
